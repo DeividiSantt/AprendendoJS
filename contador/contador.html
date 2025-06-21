@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+         body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+    #valor {
+      font-size: 60px;
+      margin: 20px;
+    }
+    button {
+      font-size: 20px;
+      margin: 10px;
+      padding: 10px 20px;
+    }
+    #historico {
+      margin-top: 30px;
+      text-align: left;
+      max-width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    </style>
+</head>
+<body>
+    <h1>Contador</h1>
+    <p id="posneg"></p>
+    <div id="valor">0</div>
+    <button onclick="incrementar()">+</button>
+    <button onclick="decrementar()">-</button>
+    <button onclick="zerar()">Zerar</button>
+
+    <h2>Histórico</h2>
+    <ul id="historico"></ul>
+
+    <script>
+        let contador = 0;
+
+        function atualizarTela() {
+            document.getElementById("valor").textContent = contador;
+
+            const mensagem = document.getElementById("posneg")
+
+
+            if( contador > 0) {
+                mensagem.textContent = "Positivo"
+                mensagem.style.color = "green"
+
+            } else if (contador < 0) {
+                mensagem.textContent = "Negativo"
+                mensagem.style.color = "red"
+
+            } else{
+               mensagem.textContent = "Neutro"
+                mensagem.style.color = "gray"
+    }
+
+        }
+
+        function adicionarHistorico(acao) {
+            const historico = document.getElementById("historico")
+            const item = document.createElement("li")
+            item.textContent = `${acao} -> Contador: ${contador}`;
+            historico.appendChild(item);
+        }
+
+        function incrementar() {
+        contador++;
+        atualizarTela();
+        adicionarHistorico("[+] Incrementou");
+        }
+
+        function decrementar() {
+        contador--;
+        atualizarTela();
+        adicionarHistorico("[-] Decrementou");
+        }
+
+        function zerar() {
+        contador = 0;
+        atualizarTela();
+        adicionarHistorico("[Zerar] Resetou");
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🎬 Lista de Filmes</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    li.marcado {
+      text-decoration: line-through;
+      color: gray;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎬 Lista de Filmes</h1>
+  <input id="entrada" placeholder="Digite um filme...">
+  <button onclick="adicionar()">Adicionar</button>
+  <button onclick="limpar()">Limpar lista</button>
+  <p>Total de filmes: <span id="contador">0</span></p>
+
+  <ul id="lista"></ul>
+
+  <script>
+  const input = document.getElementById("entrada");
+  const lista = document.getElementById("lista");
+  const contador = document.getElementsByName("contador")
+  
+  function salvarFilmes() {
+    const filmes = [];
+    lista.querySelectorAll("li").forEach(li => {filmes.push({
+      texto: li.textContent.replace("❌", "").trim(),
+      marcado: li.classList.contains("marcado")
+    });
+  });
+  localStorage.setItem("filmes", JSON.stringify(filmes));
+  }
+
+  function carregarFilmes() {
+    const filmesSalvos = JSON.parse(localStorage.getItem("filmes")) || [];
+    filmesSalvos.forEach(filme => {
+      const li = document.createElement("li");
+      li.textContent = filme.texto
+      if (filme.marcado) li.classList.add("marcado")
+
+      li.addEventListener("click", () => {
+        li.classList.toogle("marcado");
+        salvarFilmes();
+        atualizarContador();
+      })
+    })
+  }
+
+
+
+  function adicionar() {
+    const texto = input.value.trim();
+    if (texto === "") return;
+
+    const li = document.createElement("li");
+    li.textContent = texto;
+    lista.appendChild(li);
+    input.value = "";
+    atualizarContador(); // ⬅️ Atualiza o contador ao adicionar
+  }
+
+  function limpar() {
+    lista.innerHTML = "";
+    atualizarContador(); // ⬅️ Atualiza o contador ao limpar
+  }
+
+  function atualizarContador() {
+    const total = lista.children.length;
+    document.getElementById("contador").textContent = total;
+  }
+
+  // 🧠 Delegação de evento: escuta cliques nos filhos da lista
+  lista.addEventListener("click", (e) => {
+    if (e.target.tagName === "LI") {
+      e.target.classList.toggle("marcado");
+    }
+  });
+</script>
+
+</body>
+</html>
